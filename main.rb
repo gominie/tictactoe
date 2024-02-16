@@ -26,7 +26,7 @@ class TicTacToe
   end
 
   def self.switch_player
-    @@current_player = (@@current_player = "X") ? "O" : "X"
+    @@current_player = (@@current_player == "X") ? "O" : "X"
 end
 
   def self.update_board(choice)

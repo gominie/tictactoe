@@ -1,24 +1,17 @@
-# boardHash = {1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9 }
-# counter = 0
-# boardHash.each do |key, value|
-#   print "|#{value}|"
-#   counter += 1
-#  puts if counter % 3 == 0 || counter == boardHash.size
-# end
-
 # module to draw a board
 class TicTacToe
   def initialize
     @@boardHash = { 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9 }
-    @@current_player = "X"
-   end
+    @@current_player = 'X'
+    @@victory = false
+  end
 
   def self.drawBoard
-    #boardHash = { 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9 }
+    # boardHash = { 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9 }
     boardHash = @@boardHash
     counter = 0
 
-    boardHash.each do |key, value|
+    boardHash.each do |_key, value|
       print "|#{value}|"
       counter += 1
       puts if counter % 3 == 0
@@ -26,48 +19,44 @@ class TicTacToe
   end
 
   def self.switch_player
-    @@current_player = (@@current_player == "X") ? "O" : "X"
-end
+    @@current_player = @@current_player == 'X' ? 'O' : 'X'
+  end
 
   def self.update_board(choice)
     @@boardHash[choice] = @@current_player
   end
 
   def self.check_for_win
-    #horizontal
-    #vertical
-    #diagonal
-    sets_of_keys = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
-    match = sets_of_keys.any? { |keys| keys.map { |key| @@boardHash[key]}.uniq.length == 1}
-    match
-  end
+    # horizontal
+    # vertical
+    # diagonal
+    sets_of_keys = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+    match = sets_of_keys.any? { |keys| keys.map { |key| @@boardHash[key] }.uniq.length == 1 }
+    return unless match
 
-  def endGame
-    p "#{@@current_player} you have won!"
+    @@victory = true
+    puts "Player #{@@current_player} you have won!"
   end
 
   def start_game
     puts 'Welcome to terminal tic tac toe!'
 
-    loop do
-
-    TicTacToe.drawBoard
+    while !@@victory
+      TicTacToe.drawBoard
       puts "Player #{@@current_player}, select your choice (1-9)"
       choice = gets.chomp.to_i
-      if (1..9).include?(choice) && @@boardHash[choice]!= "X" && @@boardHash[choice] != "0"
-         TicTacToe.update_board(choice)
-         TicTacToe.switch_player
-       end
-       if TicTacToe.check_for_win
-        p "stop"
-       end
+      if (1..9).include?(choice) && @@boardHash[choice] != 'X' && @@boardHash[choice] != '0'
+        TicTacToe.update_board(choice)
+        TicTacToe.switch_player
+      end
+      TicTacToe.check_for_win
     end
   end
 end
 
-#rescue/exception code if user doesnt select 1..9
+# rescue/exception code if user doesnt select 1..9
 
 game = TicTacToe.new
 game.start_game
 
-#victory if??
+

@@ -33,9 +33,22 @@ end
     @@boardHash[choice] = @@current_player
   end
 
+  def self.check_for_win
+    #horizontal
+    #vertical
+    #diagonal
+    sets_of_keys = [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+    match = sets_of_keys.any? { |keys| keys.map { |key| @@boardHash[key]}.uniq.length == 1}
+    match
+  end
+
+  def endGame
+    p "#{@@current_player} you have won!"
+  end
+
   def start_game
     puts 'Welcome to terminal tic tac toe!'
-    # insert draw board module in a bit
+
     loop do
 
     TicTacToe.drawBoard
@@ -44,6 +57,9 @@ end
       if (1..9).include?(choice) && @@boardHash[choice]!= "X" && @@boardHash[choice] != "0"
          TicTacToe.update_board(choice)
          TicTacToe.switch_player
+       end
+       if TicTacToe.check_for_win
+        p "stop"
        end
     end
   end
@@ -54,4 +70,4 @@ end
 game = TicTacToe.new
 game.start_game
 
-# select = userchoice
+#victory if??

@@ -21,7 +21,7 @@ class TicTacToe
   end
 
   def self.switch_player
-    if !@@victory
+    if !@@victory && !@@draw
      @@current_player = @@current_player == 'X' ? 'O' : 'X'
       puts "Switching players. Current player: #{@@current_player}"
     end
@@ -32,9 +32,6 @@ class TicTacToe
   end
 
   def self.check_for_win
-    # horizontal
-    # vertical
-    # diagonal
     boardHash = @@boardHash
     sets_of_keys = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
     match = sets_of_keys.any? { |keys| keys.map { |key| @@boardHash[key] }.uniq.length == 1 }
@@ -47,10 +44,13 @@ class TicTacToe
   def self.no_victory
     boardHash = @@boardHash
     positions_filled = @@boardHash.all? { |_key, value| %w[X O].include?(value) }
-    return unless positions_filled && !TicTacToe.check_for_win
-
-    @@draw = true
-    puts 'draw'
+    #return unless positions_filled && !TicTacToe.check_for_win
+    if positions_filled && !@@victory
+     @@draw = true
+    # @@victory = true
+    #TicTacToe.update_board(choice)
+     puts 'draw'
+    end
   end
 
   def start_game
@@ -63,15 +63,13 @@ class TicTacToe
       next unless (1..9).include?(choice) && @@boardHash[choice] != 'X' && @@boardHash[choice] != '0'
       TicTacToe.update_board(choice)
       TicTacToe.check_for_win
+      TicTacToe.no_victory
       loop_count += 1
       # if loop_count >= 9
 
         TicTacToe.switch_player
 
-
-      TicTacToe.no_victory
-
-      #puts "Switching players. Current player: #{@@current_player}" unless @@victory || @@draw
+      #dont remove this line
       break if @@victory || @@draw
       # binding.pry
       # end
